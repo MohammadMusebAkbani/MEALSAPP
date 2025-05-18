@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect ,useContext} from "react";
 import { MEALS , CATEGORIES } from "../data/dummy-data";
-import MealItemTile from "../components/MealItemTile";
+import MealList from "../components/MealsList/MealList";
+
 
 const MealsOverViewScreen = ({ route , navigation}) => {
   const { categoryId } = route.params;
@@ -19,44 +19,11 @@ const MealsOverViewScreen = ({ route , navigation}) => {
     });
   }, [categoryId, navigation]);
 
-  // This function is used to render each item in the FlatList
-  function renderMealItem(itemData) {
-
-    function pressHandler() {
-      navigation.navigate("MealsDetails", {
-        mealId: itemData.item.id,
-      });
-    }
-    
-    return (
-      // Passing the itemData to the MealItemTile component to display the meal details
-      <MealItemTile
-        title={itemData.item.title}
-        imageUrl={itemData.item.imageUrl}
-        duration={itemData.item.duration}
-        complexity={itemData.item.complexity}
-        affordability={itemData.item.affordability}
-        onPressProps={pressHandler}
-      />
-    );
-  }
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={displayedMeals}
-        keyExtractor={(item) => item.id}
-        renderItem={renderMealItem}
-      />
-    </View>
-  );
+        // MealList component is used to display the list of meals.
+  return <MealList items={displayedMeals}/>;
+  
 };
 
 export default MealsOverViewScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
+

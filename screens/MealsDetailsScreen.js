@@ -1,20 +1,41 @@
 import { StyleSheet, Text, View, Image, ScrollView } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect,useContext } from "react";
 import { MEALS } from "../data/dummy-data";
 import MealsDetailsTile from "../components/MealsDetailsTile";
 import IconButtons from "../components/IconButtons";
+import { FavoritesContext } from "../store/context/Favorites-context";
 
 const MealsDetailsScreen = ({ route, navigation }) => {
+  const favoritesMealsCntxt = useContext(FavoritesContext);
+
   const { mealId } = route.params;
   const selectedMeal = MEALS.find((props) => props.id === mealId);
+  
+//  Context API is used to manage the state of favorite meals.
+  // The useContext hook is used to access the FavoritesContext.
+  const mealIsFavorite = favoritesMealsCntxt.ids.includes(mealId);
+
+  function changeFavoriteStatusHandler() {
+    if (mealIsFavorite) {
+      favoritesMealsCntxt.removeFavorite(mealId);
+    } else {
+      favoritesMealsCntxt.addFavorite(mealId);
+    }
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => {
-        return <IconButtons icon="star" color="white" />;
-      },
+        return (
+        // IconButtons is a custom component that renders an icon button.
+        <IconButtons
+          icon={mealIsFavorite ? "star" : "star-outline"}
+          color="white"
+          onPressProps={changeFavoriteStatusHandler}
+        />
+     ) },
     });
-  }, [navigation, selectedMeal]);
+  }, [navigation, changeFavoriteStatusHandler]);
 
   return (
     <ScrollView style={{ marginBottom: 20 }}>

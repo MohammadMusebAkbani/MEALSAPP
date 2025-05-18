@@ -8,6 +8,7 @@ import CategoriesScreen from "./screens/CategoriesScreen";
 import MealsDetailsScreen from "./screens/MealsDetailsScreen";
 import FavoritesScreen from "./screens/FavoritesScreen";
 import { Ionicons } from '@expo/vector-icons';
+import FavoritesContextProvider from "./store/context/Favorites-context";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -41,6 +42,7 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
+      <FavoritesContextProvider>
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -54,12 +56,12 @@ export default function App() {
             component={DrawerNavigator}
             options={{
               headerShown: false,
-            }}
-          />
+            }}/>
           <Stack.Screen name="MealsOverView" component={MealsOverViewScreen} />
           <Stack.Screen name="MealsDetails" component={MealsDetailsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
+      </FavoritesContextProvider>
     </>
   );
 }
